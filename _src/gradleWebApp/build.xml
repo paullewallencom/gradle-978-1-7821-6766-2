@@ -1,0 +1,28 @@
+<project>
+
+    <taskdef resource="checkstyletask.properties"/>
+    <target name="compile">
+        <echo>This message is coming from the build.xml of Ant</echo>
+    </target>
+
+
+
+    <target name="checkstyleAnt"
+            description="Generates a report of code convention violations for our test files.">
+        <taskdef resource="checkstyletask.properties"
+                 classpath="./lib/checkstyle-5.7-all.jar"/>
+        <echo>This is from the ant build.xml task CheckstyleAnt</echo>
+        <!-- See http://checkstyle.sourceforge.net/anttask.html for full options of using checkstyle with ant-->
+        <checkstyle config="sun_checks.xml"
+                    failureProperty="checkstyle.failure"
+                    failOnViolation="false"
+                    file="./src/main/java/com/xan/HelloWorldAction.java">
+            <formatter type="xml" tofile="checkstyle_report.xml"/>
+
+        </checkstyle>
+
+    </target>
+
+
+
+</project>

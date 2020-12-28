@@ -1,0 +1,52 @@
+buildscript {
+    repositories {
+		mavenLocal()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.eriwen:gradle-js-plugin:1.9.0'
+    }
+}
+// Invoke the plugin
+apply plugin: 'js'
+
+// Declare your sources
+javascript.source {
+    dev {
+        js {
+            srcDir "src/js"
+            include "*.js"
+            exclude "*.min.js"
+        }
+    }
+    prod {
+        js {
+            srcDir "src/js"
+            include "*.min.js"
+        }
+    }
+}
+
+combineJs {
+   source = javascript.source.dev.js.files
+   dest = file("${buildDir}/all.js")
+}
+
+task jsHint(type:com.eriwen.gradle.js.tasks.JsHintTask) {  
+    source = fileTree("src/js")
+    dest file("${buildDir}/jshint.out")
+}
+
+task jsDoc (type:com.eriwen.gradle.js.tasks.JsDocTask) {
+   source = javascript.source.dev.js.files
+   destinationDir = file("${buildDir}/jsdoc")
+}
+
+requireJs {
+   source = javascript.source.dev.js.files
+   dest = new File("build/out.js")
+   requirejs.options = [name: 'src/js/util.js']
+}
+
+
+	

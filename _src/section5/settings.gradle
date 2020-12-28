@@ -1,0 +1,3 @@
+include 'subProject'
+
+rootProject.name = 'section5'

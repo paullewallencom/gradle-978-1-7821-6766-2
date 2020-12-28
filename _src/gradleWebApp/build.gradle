@@ -1,0 +1,295 @@
+apply plugin: 'java'
+apply plugin: 'war'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+apply plugin: 'groovy'
+apply plugin: 'distribution'
+apply plugin: 'maven-publish'
+
+ant.importBuild 'build.xml'
+ant.path(id: 'classpath', location: './lib')
+ant.references.classpath = ant.path(location: 'lib')
+ant.references['classpath'] = ant.path(location: 'lib')
+
+
+version = '1.0'
+
+
+distributions {
+    core {
+        baseName = 'core'
+        contents {
+            // uncomment the line below to include artifacts from source directory
+            from {
+                "src/README"
+
+            }
+            // the below seems to be a bug in the distribution plugin - randomly includes these or nots
+            /*from files(sourceSets.main.output.classesDir) {
+                include "com/xan*//**//**//**//**//**//**//**//**"
+                exclude "com/xan/util*//**//**//**//**//**//**//**//**"
+            }*/
+        }
+
+    }
+}
+
+
+sourceSets {
+    main {
+        java {
+            srcDir 'src'
+        }
+        resources {
+            srcDir 'src/main/resources'
+        }
+
+    }
+
+    test {
+        java {
+            srcDir 'src/tests'
+        }
+    }
+
+    groovyestSourceSet {
+        groovy {
+            srcDir 'src/main/groovy'
+            exclude '/src/main/java/**'
+        }
+        resources {
+            srcDir 'src/main/resources'
+            exclude '/**.properties'
+        }
+    }
+}
+
+// holds classes included into server.jar and util.jar, so they are to be excluded from server.jar
+ext.serverExcludes = []
+
+task utilJar(dependsOn: compileJava, type: Jar) {
+	from files(sourceSets.main.output.classesDir) {
+		include "com/xan/util/**"
+	}
+	baseName = 'util'
+}
+
+task coreJar(dependsOn: ['clean', 'compileJava1'], type: Jar) {
+	ant.echo "In the process of building the core jar"
+	from files(sourceSets.main.output.classesDir) {
+		include "com/xan/**"
+		exclude "com/xan/util/**"
+	}
+	baseName = 'core'
+}
+
+task apiSample << {
+	ant.echo "This is where real work would happen"
+}
+
+apiSample.doFirst {
+	ant.echo "Here is where we would do any prep work"
+}
+
+apiSample.doLast {
+	ant.echo "Here is where we would do any cleanup work"
+}
+
+repositories {
+    mavenCentral()
+}
+
+task compileJava1(dependsOn: ['clean']) {
+    ant.echo "Here is where we are compiling the Java code"
+    source = file('src/main/java')
+}
+
+repositories {
+    // Use 'maven central' for resolving your dependencies.
+    // You can declare any Maven/Ivy/file repository here.
+    mavenCentral()
+    
+}
+dependencies {
+    compile "org.apache.struts:struts2-core:2.0.11.2"
+    compile "junit:junit:3.8.1"
+	compile 'org.codehaus.groovy:groovy-all:2.0.5'
+    /*//compile 'com.puppycrawl.tools.checkstyle:5.7'*/
+}
+
+task OurWar (type: War, dependsOn: ['clean','coreJar']) {
+	baseName = 'effective-gradle'
+	version = '1.0.0'
+	webXml = file('src/prod/prod.xml')
+}
+
+def locales = ['EN-US', 'EN-UK']
+
+locales.each { locale ->
+	task "internationalize$locale" (type: War) {
+		baseName = "core-$locale"
+    }
+}
+
+
+task Hello << {
+	int x = 5
+	x.times {
+		println "I will print ${x} value ${x} times."
+	}
+}
+
+/**
+ * demo of the switch statement
+ */
+task switchTask {
+	def someVal = "going to switch on this"
+	switch (someVal) {
+		case "going to switch on this":
+				  println("I've switched on this!")
+				  break
+		case "going to do something else":
+				 println("do something else")
+				 break
+	}
+}
+
+/**
+ * closure parameters demo
+ */
+someClosure ={ x,y ->
+    println("tell me the value of ${x} and ${y}")
+}
+
+/**
+ * calling closure example
+ */
+task demoClosure {
+	someClosure(11,42)
+}
+
+/**
+ * this task shows a gradle task depending on an imported Ant task from a build.xml file
+ */
+task checkstyleAntWrapper(dependsOn: checkstyleAnt) << {
+
+    println ("This is from Gradle checkStyleAnt")
+
+}
+
+/**
+ * this demonstrates a custom ant task
+ */
+task checkstyle << {
+    ant.taskdef(resource: 'checkstyletask.properties') {
+        classpath {
+            fileset(dir: './lib', includes: '*.jar')
+        }
+    }
+    println ("This is from Gradle checkStyleAnt")
+    ant.checkstyle(config: 'sun_checks.xml') {
+        fileset(dir: 'src')
+    }
+
+}
+
+
+def environments = ['dev', 'qa', 'prod']
+
+/**
+ * creates dynamic tasks 'releasedev,releaseqa,releaseprod' and sets the basename
+ */
+environments.each { environment ->
+    task "release$environment" (type: War) {
+        baseName = "${baseName}-${environment}"
+    }
+}
+
+/**
+ * demonstrates building a war from a dynamic task
+ */
+task releaseWar(type: War) << {
+     println("Doing release for env=${environments}")
+}
+
+/**
+ * example task for pushing to production
+ */
+task pushToProd << {
+   println "Building war for the prod environment"
+   baseName = "${baseName}-prod"
+}
+
+/**
+ * uses DAG to tell what environment is releasing and act accordingly
+ */
+gradle.taskGraph.whenReady {taskGraph ->
+    if (taskGraph.hasTask(releaseprod)) {
+        environment = 'prod'
+        println("releasing to prod")
+    } else {
+        if (taskGraph.hasTask(releaseqa)) {
+           println("releasing for qa")
+        } else {
+           println("releasing for dev")
+        }
+    }
+}
+
+/**
+ *  deployment upload archive from maven plugin to remote repository (or local too)
+ */
+uploadArchives {
+    repositories {
+        mavenDeployer {
+
+            repository(url: "file:///tmp/XanRepo/")
+            pom.groupId = 'xan'
+            pom.version = '1.0'
+            pom.artifactId = 'XanDemo'
+        }
+    }
+}
+
+/**
+ *  deployment of maven plugin to local repository
+ */
+install {
+    repositories {
+        mavenInstaller {
+            pom.groupId = 'xan'
+            pom.version = '1.0'
+            pom.artifactId = 'XanDemo'
+        }
+    }
+}
+
+/**
+ *  example of using the maven-publish plugin
+ */
+publishing {
+    publications {
+        mavenJava(MavenPublication) {
+            from components.java
+
+
+            artifact sourceJar {
+                //classifier "sources"
+            }
+        }
+    }
+}
+
+
+task sourceJar(type: Jar) {
+    from sourceSets.main.allJava
+}
+
+/**
+ * example of multi-module projects and closures
+ */
+Closure cl = { task -> println "I'm $task.project.name" }
+task listProjects << cl
+project(':subProject') {
+    task listProjects << cl
+}

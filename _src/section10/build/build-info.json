@@ -1,0 +1,96 @@
+{
+  "version" : "1.0.1",
+  "name" : "section10",
+  "number" : "1396501961275",
+  "type" : "GRADLE",
+  "buildAgent" : {
+    "name" : "Gradle",
+    "version" : "1.11"
+  },
+  "agent" : {
+    "name" : "Gradle",
+    "version" : "1.11"
+  },
+  "started" : "2014-04-03T00:12:41.032-0500",
+  "durationMillis" : 4253,
+  "principal" : "rvanderwerf",
+  "artifactoryPrincipal" : "admin",
+  "licenseControl" : {
+    "runChecks" : false,
+    "includePublishedArtifacts" : false,
+    "autoDiscover" : false,
+    "scopesList" : "",
+    "licenseViolationsRecipientsList" : ""
+  },
+  "buildRetention" : {
+    "count" : -1,
+    "deleteBuildArtifacts" : true,
+    "buildNumbersNotToBeDiscarded" : [ ]
+  },
+  "modules" : [ {
+    "id" : "com.xan:section10:1.0.0",
+    "artifacts" : [ {
+      "type" : "pom",
+      "sha1" : "ab0237979d69685199075bae058c50b6eef3c91f",
+      "md5" : "19103860b0569412d807ee26a8a1c545",
+      "name" : "section10-1.0.0.pom"
+    }, {
+      "type" : "jar",
+      "sha1" : "f63488f780b3b95cbfaebf801d9128546cc201a0",
+      "md5" : "0c1941fff001ab7ce2e1ef60f2140047",
+      "name" : "section10-1.0.0.jar"
+    } ],
+    "excludedArtifacts" : [ ],
+    "dependencies" : [ {
+      "type" : "jar",
+      "sha1" : "2cd5a93a4c182c3477264766e65bf99a32aa4dcb",
+      "md5" : "6b0fbe0c8236f4c29b703e733711481f",
+      "id" : "org.apache.struts:struts2-core:2.0.11.2",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "99129f16442844f6a4a11ae22fbbee40b14d774f",
+      "md5" : "1f40fb782a4f2cf78f161d32670f7a3a",
+      "id" : "junit:junit:3.8.1",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "caef1126e5358bf1327e8b4381a827da9accbb47",
+      "md5" : "ad4068aa0a898fcdd4efe3810e1a75ff",
+      "id" : "org.codehaus.groovy:groovy-all:2.0.5",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "df0e08b9588b18230a34b5d11a9bdd32e39671c3",
+      "md5" : "a1f2844a83524bd40abdb761b90e1304",
+      "id" : "com.opensymphony:xwork:2.0.5",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "bd85907738405c8f89e1fe19f62b7a0246717d6b",
+      "md5" : "aee4731c601d208e23b99e7c75b9cf01",
+      "id" : "freemarker:freemarker:2.3.8",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "0c3f31f4a65461c44e6697bf29070e638bef09d8",
+      "md5" : "1173ec5f8b1f6fb1473f4546d4b83bba",
+      "id" : "opensymphony:ognl:2.6.11",
+      "scopes" : [ "compile" ]
+    }, {
+      "type" : "jar",
+      "sha1" : "f029a2aefe2b3e1517573c580f948caac31b1056",
+      "md5" : "8a507817b28077e0478add944c64586a",
+      "id" : "commons-logging:commons-logging:1.0.4",
+      "scopes" : [ "compile" ]
+    } ]
+  } ],
+  "governance" : {
+    "blackDuckProperties" : {
+      "runChecks" : false,
+      "includePublishedArtifacts" : false,
+      "autoCreateMissingComponentRequests" : false,
+      "autoDiscardStaleComponentRequests" : false
+    }
+  }
+}

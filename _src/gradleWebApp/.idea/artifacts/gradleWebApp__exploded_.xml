@@ -1,0 +1,25 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="gradleWebApp (exploded)">
+    <output-path>$PROJECT_DIR$/classes/artifacts/gradleWebApp__exploded_</output-path>
+    <root id="root">
+      <element id="javaee-facet-resources" facet="gradleWebApp/web/Web Gradle" />
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="gradleWebApp" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Gradle: struts2-core-2.0.11.2" />
+          <element id="library" level="project" name="Gradle: junit-3.8.1" />
+          <element id="library" level="project" name="Gradle: ognl-2.6.11" />
+          <element id="library" level="project" name="Gradle: commons-logging-1.0.4" />
+          <element id="library" level="project" name="Gradle: xwork-2.0.5" />
+          <element id="library" level="project" name="Gradle: freemarker-2.3.8" />
+          <element id="library" level="project" name="Gradle: groovy-all-2.0.5" />
+        </element>
+      </element>
+      <element id="directory" name="META-INF">
+        <element id="file-copy" path="$PROJECT_DIR$/classes/artifacts/gradleWebApp__exploded_/META-INF/MANIFEST.MF" />
+      </element>
+    </root>
+  </artifact>
+</component>

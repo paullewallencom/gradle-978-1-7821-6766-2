@@ -1,0 +1,51 @@
+apply plugin: 'java'
+apply plugin: 'maven'
+
+
+uploadArchives {
+   repositories {
+       mavenDeployer {
+           repository(url: "file:///tmp/myRepo/")
+		   pom.groupId = 'xan'
+           pom.version = '1.0'
+           pom.artifactId = 'XanDemo'
+       }
+   }
+}
+
+repositories {
+			/*
+                maven {
+					url “http://www.something.com/mavenrepo”
+			   }
+				ivy {
+					url “http://www.something.com/ivyRepo”
+					credentials {
+						username ‘username’
+						password ‘password’
+					}
+				}
+			} */
+			mavenCentral()
+}
+
+dependencies {
+//	compile project(':subProject')
+//	runtime files('libs/a.jar', 'libs/b.jar')
+	compile "org.apache.struts:struts2-core:2.0.11.2"
+	compile "junit:junit:3.8.1"
+
+}
+
+configurations {
+    compile {
+        description = 'compile classpath'
+        transitive = true
+    }
+    runtime {
+        extendsFrom compile
+    }
+}
+configurations.compile {
+    description = 'compile classpath'
+}
